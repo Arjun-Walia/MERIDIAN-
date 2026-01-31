@@ -1,12 +1,10 @@
-<div align="center">
+# MERIDIAN
 
-<img src="logo/logo.png" alt="MERIDIAN Logo" width="180"/>
+![MERIDIAN Logo](logo/logo.png)
 
-# 🌐 MERIDIAN
+## Multi-Source AI Decision Assistant
 
-### Multi-Source AI Decision Assistant
-
-_MERN + TypeScript · Agentic Orchestration · Multi-DB Reasoning_
+MERN + TypeScript · Agentic Orchestration · Multi-DB Reasoning
 
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
@@ -21,48 +19,42 @@ _MERN + TypeScript · Agentic Orchestration · Multi-DB Reasoning_
 
 **MERIDIAN** is an advanced, production-grade chatbot system that connects to multiple heterogeneous data sources (Jira, MongoDB, ATS, Slack, etc.), unifies entities across them, and answers high-stakes decision queries with **ranked, explainable recommendations** instead of simple Q&A.
 
-> 💡 Think of it as an **intelligent data fabric + reasoning layer** you query via chat.
-
-[🎯 Problem](#-problem--motivation) • [🚀 Features](#-what-meridian-does) • [🏗️ Architecture](#-high-level-architecture) • [⚙️ Setup](#-setup) • [📍 Roadmap](#-feature-breakdown)
-
-</div>
+> Think of it as an _intelligent data fabric + reasoning layer_ you query via chat.
 
 ---
 
-## 📑 Table of Contents
+## Table of Contents
 
-- [🎯 Problem & Motivation](#-problem--motivation)
-- [🚀 What MERIDIAN Does](#-what-meridian-does)
-- [💡 Why It's Novel](#-why-its-novel--patent-worthy)
-- [🏗️ High-Level Architecture](#-high-level-architecture)
-- [⭐ Core Features](#-core-features-mvp-scope)
-- [🗄️ Data Model](#-data-model-mongodb--sketch)
-- [🖥️ Backend Responsibilities](#-backend-responsibilities)
-- [🎨 Frontend Responsibilities](#-frontend-responsibilities)
-- [📍 Feature Breakdown](#-feature-breakdown-student--mvp-scope)
-- [📜 What's Patentable](#-whats-patentable-here)
-- [⚙️ Setup](#-setup-skeleton-instructions)
+- [Problem and Motivation](#problem-and-motivation)
+- [What MERIDIAN Does](#what-meridian-does)
+- [High-Level Architecture](#high-level-architecture)
+- [Core Features](#core-features)
+- [Data Model](#data-model)
+- [Backend Responsibilities](#backend-responsibilities)
+- [Frontend Responsibilities](#frontend-responsibilities)
+- [Setup](#setup)
+- [License](#license)
 
 ---
 
-## 🎯 Problem & Motivation
+## Problem and Motivation
 
 Modern teams run on **fragmented tools**:
 
 ```mermaid
 graph LR
-    subgraph "🏢 Modern Organization"
-        A["👥 Hiring"] --> A1[ATS]
+    subgraph "Modern Organization"
+        A["Hiring"] --> A1[ATS]
         A --> A2[Excel]
         A --> A3[Email]
         A --> A4[Slack]
         
-        B["💻 Engineering"] --> B1[Jira]
+        B["Engineering"] --> B1[Jira]
         B --> B2[Git]
         B --> B3[CI Logs]
         B --> B4[Incident Docs]
         
-        C["📊 Operations"] --> C1[CRMs]
+        C["Operations"] --> C1[CRMs]
         C --> C2[Sheets]
         C --> C3[Ticketing]
     end
@@ -72,116 +64,80 @@ graph LR
     style C fill:#e8f5e9
 ```
 
-<details>
-<summary>📋 <b>Example Complex Query</b> (click to expand)</summary>
+### Example Complex Query
 
-<br/>
-
-> *"Who is the best developer to lead the new authentication project, with >3 years of relevant experience, good team feedback, and no critical open bugs?"*
+> _"Who is the best developer to lead the new authentication project, with >3 years of relevant experience, good team feedback, and no critical open bugs?"_
 
 **To answer this manually, someone must:**
+
 1. Query multiple tools one by one
 2. Stitch context together in their head
 3. Justify the final choice without clear evidence
 
-</details>
+### The Problem with Current Solutions
 
-<br/>
-
-### ❌ The Problem with Current Solutions
-
-<table>
-<tr>
-<th>❌ Current Pain Points</th>
-<th>❌ Existing Chatbot Limitations</th>
-</tr>
-<tr>
-<td>
+**Current Pain Points:**
 
 | Challenge | Description |
-|-----------|-------------|
-| 🔍 Manual Queries | Query multiple tools one by one |
-| 🧠 Mental Stitching | Stitch context in your head |
-| 📝 No Audit Trail | Justify choices without evidence |
+| --------- | ----------- |
+| Manual Queries | Query multiple tools one by one |
+| Mental Stitching | Stitch context in your head |
+| No Audit Trail | Justify choices without evidence |
 
-</td>
-<td>
+**Existing Chatbot Limitations:**
 
 | Limitation | Impact |
-|------------|--------|
+| ---------- | ------ |
 | Single DB only | Can't aggregate across tools |
 | No entity resolution | Same person = different records |
 | No decision context | Forgets past interactions |
 | No explainability | Black-box answers |
 
-</td>
-</tr>
-</table>
-
-### ✅ MERIDIAN Solves This!
+### MERIDIAN Solves This
 
 ---
 
-## 🚀 What MERIDIAN Does
+## What MERIDIAN Does
 
-<table>
-<tr>
-<td width="50%" valign="top">
+### Multi-Source Orchestration
 
-### 🔗 Multi-Source Orchestration
 One natural language question → parallel queries over multiple data sources (MongoDB, Jira, REST APIs, etc.).
 
-</td>
-<td width="50%" valign="top">
+### Entity Resolution
 
-### 🆔 Entity Resolution
 Unifies "John Smith" from ATS, `john.smith` from Jira, and `john_s` from Slack into a single canonical entity with confidence scores.
 
-</td>
-</tr>
-<tr>
-<td width="50%" valign="top">
+### Constraint-Aware Reasoning
 
-### 🎛️ Constraint-Aware Reasoning
-Applies constraints like "salary < 80k" or ">3 years experience" across *all* relevant sources and re-plans queries when constraints change.
+Applies constraints like "salary < 80k" or ">3 years experience" across _all_ relevant sources and re-plans queries when constraints change.
 
-</td>
-<td width="50%" valign="top">
+### Explainable Ranking
 
-### 📊 Explainable Ranking
 Returns a ranked list of options with an evidence trail: which data source contributed what, and how it affected the score.
 
-</td>
-</tr>
-<tr>
-<td colspan="2" align="center">
+### Decision Logging and Learning
 
-### 📚 Decision Logging & Learning
 Logs decisions and later outcomes ("we hired John; performance excellent"), so the system can learn which signals predict good decisions.
 
-</td>
-</tr>
-</table>
+> **This is not a ChatGPT wrapper** — it is a _system for reasoning over messy, distributed operational data._
 
-> ⚠️ **This is not a ChatGPT wrapper** — it is a **system for reasoning over messy, distributed operational data.**
-
-### 🔄 Data Flow Overview
+### Data Flow Overview
 
 ```mermaid
 flowchart LR
-    Q["🗣️ Natural Language<br/>Query"] --> M["🌐 MERIDIAN<br/>Engine"]
+    Q["Natural Language Query"] --> M["MERIDIAN Engine"]
     
-    M --> S1[("📋 Jira")]
-    M --> S2[("🗄️ MongoDB")]
-    M --> S3[("📧 Slack")]
-    M --> S4[("👔 ATS")]
+    M --> S1[("Jira")]
+    M --> S2[("MongoDB")]
+    M --> S3[("Slack")]
+    M --> S4[("ATS")]
     
-    S1 --> ER["🔗 Entity<br/>Resolution"]
+    S1 --> ER["Entity Resolution"]
     S2 --> ER
     S3 --> ER
     S4 --> ER
     
-    ER --> R["📊 Ranked Results<br/>+ Explanations"]
+    ER --> R["Ranked Results + Explanations"]
     
     style M fill:#4fc3f7,stroke:#0288d1,stroke-width:2px
     style R fill:#81c784,stroke:#388e3c,stroke-width:2px
@@ -189,80 +145,37 @@ flowchart LR
 
 ---
 
-## 💡 Why It's Novel / Patent-Worthy
-
-MERIDIAN's novelty is in **how** it reasons across heterogeneous sources, not in using an LLM per se.
-
-```mermaid
-mindmap
-  root(("🌐 MERIDIAN<br/>Innovation"))
-    🔌 Multi-DB Orchestration
-      Dynamic query planning
-      Runtime schema discovery
-      No rigid ETL
-    🆔 Fuzzy Entity Dedup
-      Levenshtein similarity
-      Email/phone matching
-      User feedback loop
-    🎯 Constraint Propagation
-      Cross-source constraints
-      Partial re-planning
-      Smart invalidation
-    📋 Explainability
-      Provenance breakdown
-      Per-source evidence
-      Confidence scores
-    📈 Outcome Learning
-      Decision logging
-      Pattern recognition
-      Adaptive weights
-```
-
-### 🏆 Key Innovations
-
-| # | Innovation | Description |
-|:-:|------------|-------------|
-| 1️⃣ | **Entity-agnostic multi-database orchestration** | Dynamic query planning over multiple, schema-divergent sources. No rigid ETL; uses adapters and schemas discovered at runtime. |
-| 2️⃣ | **Fuzzy entity deduplication with feedback loop** | Uses name similarity (Levenshtein), email/phone, and metadata to map entities. Incorporates user corrections to improve future mappings. |
-| 3️⃣ | **Cross-source constraint propagation** | A single constraint (e.g., "salary < 80k") propagates across all sources and only re-queries what actually changed. |
-| 4️⃣ | **Explainability trace-back** | Every ranked option has a provenance breakdown: which fields from which source contributed to which criterion. |
-| 5️⃣ | **Outcome-driven learning** | Decisions and outcomes are logged; ranking weights adapt to patterns that predict successful outcomes. |
-
-> 📜 These innovations form the core of what could underpin a **patent claim**.
-
----
-
-## 🏗️ High-Level Architecture
+## High-Level Architecture
 
 ```mermaid
 flowchart TB
-    subgraph "👤 User Layer"
-        UI["🖥️ Chat UI<br/>(React + TypeScript)"]
+    subgraph "User Layer"
+        UI["Chat UI (React + TypeScript)"]
     end
     
-    subgraph "🧠 Intelligence Layer"
-        NLP["🗣️ NLP Layer<br/>Intent Recognition<br/>Entity Extraction"]
-        QP["📋 Query Planner<br/>Maps intent → execution plan"]
-        QE["⚡ Query Executor<br/>Parallel execution<br/>Handles failures"]
+    subgraph "Intelligence Layer"
+        NLP["NLP Layer - Intent Recognition, Entity Extraction"]
+        QP["Query Planner - Maps intent to execution plan"]
+        QE["Query Executor - Parallel execution, Handles failures"]
     end
     
-    subgraph "🔗 Integration Layer"
-        ER["🆔 Entity Resolution<br/>Deduplication<br/>Canonical IDs"]
-        RE["📊 Ranking Engine<br/>Scoring & Evidence"]
+    subgraph "Integration Layer"
+        ER["Entity Resolution - Deduplication, Canonical IDs"]
+        RE["Ranking Engine - Scoring and Evidence"]
     end
     
-    subgraph "🔌 Adapters"
+    subgraph "Adapters"
         AD1["Jira Adapter"]
         AD2["MongoDB Adapter"]
         AD3["Slack Adapter"]
         AD4["REST Adapter"]
     end
     
-    subgraph "💾 Data Sources"
-        DS1[("📋 Jira")]
-        DS2[("🗄️ MongoDB")]
-        DS3[("📧 Slack")]
-        DS4[("🌐 REST APIs")]
+    subgraph "Data Sources"
+        DS1[("Jira")]
+        DS2[("MongoDB")]
+        DS3[("Slack")]
+        DS4[("REST APIs")]
     end
     
     UI <--> NLP
@@ -285,24 +198,22 @@ flowchart TB
     style RE fill:#e8f5e9,stroke:#388e3c
 ```
 
-### 🛠️ Tech Stack
+### Tech Stack
 
-<table>
-<tr>
-<td align="center"><img src="https://img.icons8.com/color/48/000000/react-native.png" width="40"/><br/><b>React</b><br/>Frontend</td>
-<td align="center"><img src="https://img.icons8.com/color/48/000000/typescript.png" width="40"/><br/><b>TypeScript</b><br/>Language</td>
-<td align="center"><img src="https://img.icons8.com/color/48/000000/nodejs.png" width="40"/><br/><b>Node.js</b><br/>Backend</td>
-<td align="center"><img src="https://img.icons8.com/ios/50/000000/express-js.png" width="40"/><br/><b>Express</b><br/>API</td>
-<td align="center"><img src="https://img.icons8.com/color/48/000000/mongodb.png" width="40"/><br/><b>MongoDB</b><br/>Database</td>
-<td align="center"><img src="https://img.icons8.com/color/48/000000/artificial-intelligence.png" width="40"/><br/><b>AI/LLM</b><br/>Abstracted</td>
-</tr>
-</table>
+| Component | Technology |
+| --------- | ---------- |
+| Frontend | React |
+| Language | TypeScript |
+| Backend | Node.js |
+| API | Express |
+| Database | MongoDB |
+| AI/LLM | Abstracted |
 
 ---
 
-## ⭐ Core Features (MVP Scope)
+## Core Features
 
-### 📡 5.1 Source Configuration & Adapters
+### Source Configuration and Adapters
 
 Each external system (Jira, internal Mongo, Airtable, generic REST) is represented as a **DataSource**:
 
@@ -310,8 +221,7 @@ Each external system (Jira, internal Mongo, Airtable, generic REST) is represent
 type SourceType = 'jira' | 'mongodb' | 'airtable' | 'rest' | 'slack';
 ```
 
-<details>
-<summary>📖 <b>Adapter Interface</b> (click to expand)</summary>
+**Adapter Interface:**
 
 ```typescript
 interface SourceAdapter {
@@ -324,47 +234,45 @@ interface SourceAdapter {
 }
 ```
 
-</details>
-
-> 🔌 This makes the AI layer **source-agnostic**.
+> This makes the AI layer **source-agnostic**.
 
 ---
 
-### 🆔 5.2 Entity Resolution
+### Entity Resolution
 
 **Goal:** Unify records across systems representing the same entity.
 
 ```mermaid
 flowchart LR
-    subgraph "📋 Jira"
-        J["name: 'John Smith'<br/>email: john@company.com"]
+    subgraph "Jira"
+        J["name: 'John Smith', email: john@company.com"]
     end
     
-    subgraph "👔 ATS"
-        A["full_name: 'John A. Smith'<br/>email: john@company.com"]
+    subgraph "ATS"
+        A["full_name: 'John A. Smith', email: john@company.com"]
     end
     
-    subgraph "📧 Slack"
-        S["handle: 'john_s'<br/>display: 'john_s'"]
+    subgraph "Slack"
+        S["handle: 'john_s', display: 'john_s'"]
     end
     
-    J --> ER["🔗 Entity<br/>Resolution"]
+    J --> ER["Entity Resolution"]
     A --> ER
     S --> ER
     
-    ER --> C["🆔 Canonical Entity<br/>ID: person:john.smith@company.com<br/>Confidence: 95%"]
+    ER --> C["Canonical Entity - ID: person:john.smith@company.com, Confidence: 95%"]
     
     style C fill:#c8e6c9,stroke:#388e3c,stroke-width:2px
 ```
 
 **Approach:**
-- ✅ Levenshtein similarity on names
-- ✅ Exact match on email/phone when available
-- ✅ Threshold-based matching
-- ✅ Persistent mappings with confidence scores
 
-<details>
-<summary>📖 <b>Entity Mapping Schema</b></summary>
+- Levenshtein similarity on names
+- Exact match on email/phone when available
+- Threshold-based matching
+- Persistent mappings with confidence scores
+
+**Entity Mapping Schema:**
 
 ```json
 {
@@ -382,26 +290,25 @@ flowchart LR
 }
 ```
 
-</details>
-
 ---
 
-### 🔄 5.3 Multi-Source Query Orchestration
+### Multi-Source Query Orchestration
 
 **Example Query:**
+
 > "Show me developers who worked on authentication in the last 3 months, have no open P1 bugs, and salary < 80k."
 
 ```mermaid
 sequenceDiagram
-    participant U as 👤 User
-    participant P as 📋 Query Planner
-    participant E as ⚡ Executor
-    participant J as 📋 Jira
-    participant B as 🐛 Bug Tracker
-    participant H as 👔 HR DB
+    participant U as User
+    participant P as Query Planner
+    participant E as Executor
+    participant J as Jira
+    participant B as Bug Tracker
+    participant H as HR DB
     
     U->>P: Natural language query
-    P->>P: Parse constraints & sources
+    P->>P: Parse constraints and sources
     
     par Parallel Execution
         P->>E: Execute plan
@@ -414,38 +321,39 @@ sequenceDiagram
     B-->>E: Bug assignments
     H-->>E: Salary data
     
-    E->>E: Normalize & merge results
+    E->>E: Normalize and merge results
     E->>U: Ranked candidates + evidence
 ```
 
 **Key Capabilities:**
+
 | Feature | Description |
-|---------|-------------|
-| 🎯 Smart Planning | Determines relevant sources per constraint |
-| ⚡ Parallel Execution | Queries all sources simultaneously |
-| 🛡️ Fault Tolerance | Handles partial failures gracefully |
+| ------- | ----------- |
+| Smart Planning | Determines relevant sources per constraint |
+| Parallel Execution | Queries all sources simultaneously |
+| Fault Tolerance | Handles partial failures gracefully |
 
 ---
 
-### 📊 5.4 Ranking & Explanation
+### Ranking and Explanation
 
 Each option is scored across multiple criteria:
 
 ```mermaid
 graph TD
-    subgraph "📊 Scoring Engine"
-        C1["Experience<br/>Weight: 30%"]
-        C2["Salary Fit<br/>Weight: 25%"]
-        C3["Bug Count<br/>Weight: 25%"]
-        C4["Team Sentiment<br/>Weight: 20%"]
+    subgraph "Scoring Engine"
+        C1["Experience - Weight: 30%"]
+        C2["Salary Fit - Weight: 25%"]
+        C3["Bug Count - Weight: 25%"]
+        C4["Team Sentiment - Weight: 20%"]
     end
     
-    C1 --> S["⭐ Total Score: 87%"]
+    C1 --> S["Total Score: 87%"]
     C2 --> S
     C3 --> S
     C4 --> S
     
-    S --> E["📋 Evidence Panel<br/>• Data fields from each source<br/>• Impact on score<br/>• Constraints satisfied ✓/✗"]
+    S --> E["Evidence Panel: Data fields from each source, Impact on score, Constraints satisfied"]
     
     style S fill:#fff59d,stroke:#f9a825,stroke-width:2px
     style E fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
@@ -453,11 +361,11 @@ graph TD
 
 ---
 
-### 📝 5.5 Decision Logging & Learning
+### Decision Logging and Learning
 
 ```mermaid
 flowchart LR
-    subgraph "📝 Decision Capture"
+    subgraph "Decision Capture"
         D1["Query/Context"]
         D2["Constraints"]
         D3["Ranked Options"]
@@ -465,11 +373,11 @@ flowchart LR
         D5["Reasoning"]
     end
     
-    D1 & D2 & D3 & D4 & D5 --> LOG[("💾 Decision Log")]
+    D1 & D2 & D3 & D4 & D5 --> LOG[("Decision Log")]
     
-    LOG --> O["📈 Outcome Tracking<br/>'John shipped 3 features'<br/>'Team feedback: excellent'"]
+    LOG --> O["Outcome Tracking: 'John shipped 3 features', 'Team feedback: excellent'"]
     
-    O --> L["🧠 Learning<br/>Adjust ranking weights<br/>Improve predictions"]
+    O --> L["Learning: Adjust ranking weights, Improve predictions"]
     
     L -.->|Feedback Loop| D1
     
@@ -479,7 +387,9 @@ flowchart LR
 
 ---
 
-## 🗄️ Data Model (MongoDB – Sketch)
+## Data Model
+
+MongoDB Schema (Sketch):
 
 ```mermaid
 erDiagram
@@ -532,24 +442,24 @@ erDiagram
 
 ---
 
-## 🖥️ Backend Responsibilities
+## Backend Responsibilities
 
 **Node.js + Express + TypeScript**
 
-### 🔌 API Endpoints
+### API Endpoints
 
 | Endpoint | Method | Description |
-|----------|--------|-------------|
+| -------- | ------ | ----------- |
 | `/api/sources` | GET, POST, PUT, DELETE | CRUD for data sources |
 | `/api/chat/query` | POST | Main chat endpoint |
 | `/api/decisions` | GET, POST | Decision logging |
 | `/api/entities` | GET | Entity resolution info |
 
-### 🏗️ Core Services
+### Core Services
 
 ```mermaid
 graph TD
-    subgraph "🖥️ Backend Services"
+    subgraph "Backend Services"
         A[Adapter Layer] --> B[Query Planner]
         B --> C[Query Executor]
         C --> D[Entity Deduplicator]
@@ -563,31 +473,31 @@ graph TD
     style G fill:#e1f5fe,stroke:#0288d1,stroke-width:2px
 ```
 
-### 🔐 Security & Infrastructure
+### Security and Infrastructure
 
 | Feature | Implementation |
-|---------|----------------|
-| 🔑 Authentication | JWT-based auth |
-| 🔒 API Keys | Encrypted storage |
-| 🛡️ Rate Limiting | Express middleware |
-| 📊 Observability | Logging & metrics |
+| ------- | -------------- |
+| Authentication | JWT-based auth |
+| API Keys | Encrypted storage |
+| Rate Limiting | Express middleware |
+| Observability | Logging and metrics |
 
 ---
 
-## 🎨 Frontend Responsibilities
+## Frontend Responsibilities
 
 **React + TypeScript**
 
-### 📐 UI Components
+### UI Components
 
 ```mermaid
 graph TB
-    subgraph "🎨 Frontend Architecture"
-        A["💬 Chat Pane<br/>Conversation view<br/>Quick suggestions"]
-        B["📋 Context Sidebar<br/>Active constraints<br/>Data source status"]
-        C["📊 Results Viewer<br/>Ranked cards<br/>Sort & filter"]
-        D["🔍 Evidence Panel<br/>Source breakdown<br/>Confidence viz"]
-        E["📝 Decision Log<br/>History view<br/>Outcome tracking"]
+    subgraph "Frontend Architecture"
+        A["Chat Pane - Conversation view, Quick suggestions"]
+        B["Context Sidebar - Active constraints, Data source status"]
+        C["Results Viewer - Ranked cards, Sort and filter"]
+        D["Evidence Panel - Source breakdown, Confidence viz"]
+        E["Decision Log - History view, Outcome tracking"]
     end
     
     A <--> B
@@ -600,149 +510,26 @@ graph TB
     style D fill:#fff3e0
 ```
 
-### 🎯 UI/UX Goals
+### UI/UX Goals
 
-<table>
-<tr>
-<td>🎨 <b>Glassmorphism</b></td>
-<td>Modern, translucent UI elements</td>
-</tr>
-<tr>
-<td>✨ <b>Smooth Transitions</b></td>
-<td>Fluid animations between states</td>
-</tr>
-<tr>
-<td>🔄 <b>Motion Feedback</b></td>
-<td>Subtle loading indicators during queries</td>
-</tr>
-<tr>
-<td>📱 <b>Responsive</b></td>
-<td>Works across desktop and tablet</td>
-</tr>
-</table>
+| Goal | Description |
+| ---- | ----------- |
+| Glassmorphism | Modern, translucent UI elements |
+| Smooth Transitions | Fluid animations between states |
+| Motion Feedback | Subtle loading indicators during queries |
+| Responsive | Works across desktop and tablet |
 
 ---
 
-## 📍 Feature Breakdown (Student / MVP Scope)
+## Setup
 
-```mermaid
-gantt
-    title 📅 MERIDIAN Development Roadmap
-    dateFormat  YYYY-MM-DD
-    section Phase 1
-    Basic Express API          :p1a, 2025-01-01, 7d
-    MongoDB Connection         :p1b, after p1a, 3d
-    Jira + Mongo Adapters      :p1c, after p1b, 4d
-    section Phase 2
-    Entity Mapping             :p2a, after p1c, 4d
-    Deduplication Logic        :p2b, after p2a, 3d
-    section Phase 3
-    Intent Detection           :p3a, after p2b, 3d
-    Constraint Extraction      :p3b, after p3a, 2d
-    Chat UI (React)            :p3c, after p3b, 2d
-    section Phase 4
-    Criterion Scoring          :p4a, after p3c, 3d
-    Evidence Panel             :p4b, after p4a, 2d
-    Confidence Display         :p4c, after p4b, 2d
-    section Phase 5
-    Decision Log API           :p5a, after p4c, 2d
-    Outcome Capture            :p5b, after p5a, 2d
-    UX Polish                  :p5c, after p5b, 3d
-```
-
-### 📋 Phase Details
-
-<details>
-<summary><b>🔹 Phase 1 (Weeks 1–2): Foundations</b></summary>
-
-- ✅ Basic Express API
-- ✅ MongoDB connection
-- ✅ Simple Jira + Mongo adapter
-- ✅ Hard-coded example query orchestrated across two sources
-
-</details>
-
-<details>
-<summary><b>🔹 Phase 2 (Week 3): Entity Resolution</b></summary>
-
-- ✅ Implement entity mapping & deduplication
-- ✅ Store canonical IDs
-- ✅ Show merged entities in API responses
-
-</details>
-
-<details>
-<summary><b>🔹 Phase 3 (Week 4): Conversational Layer</b></summary>
-
-- ✅ Simple intent detection (regex / heuristic)
-- ✅ Constraint extraction (e.g., ">3 years", "<80k")
-- ✅ Chat UI in React wired to backend
-
-</details>
-
-<details>
-<summary><b>🔹 Phase 4 (Week 5): Ranking & Explainability</b></summary>
-
-- ✅ Criterion-based scoring
-- ✅ Evidence panel in UI
-- ✅ Confidence display
-
-</details>
-
-<details>
-<summary><b>🔹 Phase 5 (Week 6): Decision Logging & Polish</b></summary>
-
-- ✅ Decision log API and UI
-- ✅ Outcome capture
-- ✅ Small UX refinements and performance tweaks
-
-</details>
-
----
-
-## 📜 What's Patentable Here?
-
-<table>
-<tr>
-<th>Innovation</th>
-<th>Description</th>
-<th>Patent Relevance</th>
-</tr>
-<tr>
-<td>🔄 <b>Multi-source orchestration protocol</b></td>
-<td>How user intent is decomposed into per-source query plans and recomposed into a coherent answer</td>
-<td>⭐⭐⭐⭐⭐</td>
-</tr>
-<tr>
-<td>🆔 <b>Entity resolution + constraint propagation</b></td>
-<td>Same canonical entity across systems with constraints that span sources</td>
-<td>⭐⭐⭐⭐</td>
-</tr>
-<tr>
-<td>📋 <b>Explainability trace-back</b></td>
-<td>Consistent mechanism to map final ranked decisions back to per-source evidence with confidence</td>
-<td>⭐⭐⭐⭐</td>
-</tr>
-<tr>
-<td>📈 <b>Outcome-driven model adaptation</b></td>
-<td>System that tunes its own ranking criteria based on historical decision outcomes</td>
-<td>⭐⭐⭐⭐⭐</td>
-</tr>
-</table>
-
-> 💼 Even if you don't file anything, this is **excellent interview and portfolio material**.
-
----
-
-## ⚙️ Setup (Skeleton Instructions)
-
-### 📦 Prerequisites
+### Prerequisites
 
 - Node.js v18+
 - MongoDB (local or Atlas)
 - npm or yarn
 
-### 🖥️ Backend Setup
+### Backend Setup
 
 ```bash
 # Create and navigate to backend directory
@@ -761,10 +548,9 @@ npm install typescript ts-node-dev @types/node @types/express --save-dev
 npx tsc --init
 ```
 
-<details>
-<summary>📁 <b>Backend Structure</b></summary>
+**Backend Structure:**
 
-```
+```text
 backend/
 ├── src/
 │   ├── index.ts
@@ -788,9 +574,7 @@ backend/
 └── tsconfig.json
 ```
 
-</details>
-
-### 🎨 Frontend Setup
+### Frontend Setup
 
 ```bash
 # Create React app with TypeScript
@@ -803,10 +587,9 @@ cd frontend
 npm install axios
 ```
 
-<details>
-<summary>📁 <b>Frontend Structure</b></summary>
+**Frontend Structure:**
 
-```
+```text
 frontend/
 ├── src/
 │   ├── components/
@@ -827,9 +610,7 @@ frontend/
 └── tsconfig.json
 ```
 
-</details>
-
-### 🚀 Quick Start
+### Quick Start
 
 ```bash
 # Terminal 1: Start backend
@@ -843,16 +624,12 @@ npm start
 
 ---
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
-<div align="center">
+Made with love for intelligent decision-making
 
-**Made with ❤️ for intelligent decision-making**
-
-[⬆ Back to Top](#-meridian)
-
-</div>
+[Back to Top](#meridian)
