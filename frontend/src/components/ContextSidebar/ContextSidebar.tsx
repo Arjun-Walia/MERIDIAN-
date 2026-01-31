@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './ContextSidebar.css';
 import { DataSource } from '../../types';
 
@@ -7,6 +7,8 @@ interface ContextSidebarProps {
 }
 
 const ContextSidebar: React.FC<ContextSidebarProps> = ({ sources }) => {
+  const [activeSourceId, setActiveSourceId] = useState<string | null>(null);
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'connected': return '#22c55e';
@@ -28,32 +30,43 @@ const ContextSidebar: React.FC<ContextSidebarProps> = ({ sources }) => {
 
   return (
     <aside className="context-sidebar">
-      <div className="sidebar-section">
-        <h3>📊 Data Sources</h3>
-        <ul className="sources-list">
-          {sources.map((source) => (
-            <li key={source.id} className="source-item">
-              <span className="source-icon">{getSourceIcon(source.type)}</span>
-              <span className="source-name">{source.name}</span>
-              <span 
-                className="source-status"
-                style={{ backgroundColor: getStatusColor(source.status) }}
-              />
-            </li>
-          ))}
-        </ul>
+      {/* Top section - scrollable content */}
+      <div className="sidebar-content">
+        <div className="sidebar-section">
+          <h3>📊 Data Sources</h3>
+          <ul className="sources-list">
+            {sources.map((source) => (
+              <li 
+                key={source.id} 
+                className={`source-item ${activeSourceId === source.id ? 'active' : ''}`}
+                onClick={() => setActiveSourceId(source.id)}
+              >
+                <span className="source-icon">{getSourceIcon(source.type)}</span>
+                <span className="source-name">{source.name}</span>
+                <span 
+                  className="source-status"
+                  style={{ backgroundColor: getStatusColor(source.status) }}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+        
+        <div className="sidebar-section">
+          <h3>🔗 Quick Actions</h3>
+          <button className="action-btn">+ Connect Source</button>
+          <button className="action-btn">📥 Import Data</button>
+        </div>
+        
+        <div className="sidebar-section">
+          <h3>📈 Recent Decisions</h3>
+          <p className="empty-state">No decisions yet</p>
+        </div>
       </div>
       
-      <div className="sidebar-section">
-        <h3>🔗 Quick Actions</h3>
-        <button className="action-btn">+ Connect Source</button>
-        <button className="action-btn">📥 Import Data</button>
-        <button className="action-btn">⚙️ Settings</button>
-      </div>
-      
-      <div className="sidebar-section">
-        <h3>📈 Recent Decisions</h3>
-        <p className="empty-state">No decisions yet</p>
+      {/* Bottom section - pinned to bottom */}
+      <div className="sidebar-footer">
+        <button className="action-btn settings-btn">⚙️ Settings</button>
       </div>
     </aside>
   );

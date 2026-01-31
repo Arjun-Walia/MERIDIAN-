@@ -2,15 +2,29 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+.aurora-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
 }
 
 .app-header {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  background: rgba(26, 26, 46, 0.85);
+  backdrop-filter: blur(10px);
   padding: 1rem 2rem;
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid rgba(51, 51, 51, 0.5);
   display: flex;
   align-items: center;
   gap: 2rem;
+  position: relative;
+  z-index: 10;
 }
 
 .logo {
@@ -45,13 +59,23 @@
   display: grid;
   grid-template-columns: 280px 1fr 350px;
   height: calc(100vh - 70px);
+  position: relative;
+  z-index: 10;
+  overflow: hidden;
+}
+
+/* Force sidebar to fill grid cell */
+.app-main > aside {
+  height: 100%;
 }
 
 .chat-container {
   display: flex;
   flex-direction: column;
-  border-left: 1px solid #333;
-  border-right: 1px solid #333;
+  border-left: 1px solid rgba(51, 51, 51, 0.5);
+  border-right: 1px solid rgba(51, 51, 51, 0.5);
+  background: rgba(26, 26, 26, 0.7);
+  backdrop-filter: blur(10px);
 }
 
 @media (max-width: 1200px) {

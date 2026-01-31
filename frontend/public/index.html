@@ -4,12 +4,42 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/logo.png" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo.png" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- Viewport meta tag optimized for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=5" />
+    <meta name="theme-color" content="#09090B" media="(prefers-color-scheme: dark)" />
     <meta name="theme-color" content="#1a1a2e" />
     <meta name="description" content="MERIDIAN - Multi-Source AI Decision Assistant" />
+    <!-- Mobile web app meta tags -->
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="MERIDIAN" />
+    <!-- Prevent phone number detection -->
+    <meta name="format-detection" content="telephone=no" />
     <title>MERIDIAN</title>
   </head>
   <body>
+    <!-- Skip to main content link for keyboard users -->
+    <a 
+      href="#main-content" 
+      class="skip-to-main"
+      style="
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        z-index: 9999;
+        padding: 12px 24px;
+        background-color: #22d3ee;
+        color: #09090b;
+        font-weight: 600;
+        text-decoration: none;
+        border-radius: 0 0 8px 0;
+      "
+      onfocus="this.style.left='0'"
+      onblur="this.style.left='-9999px'"
+    >
+      Skip to main content
+    </a>
     <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>

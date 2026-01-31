@@ -1,5 +1,6 @@
 .results-viewer {
-  background: #141414;
+  background: rgba(20, 20, 20, 0.75);
+  backdrop-filter: blur(10px);
   display: flex;
   flex-direction: column;
   overflow: hidden;
