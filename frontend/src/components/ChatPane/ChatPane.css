@@ -20,6 +20,14 @@
   color: #888;
 }
 
+.welcome-logo {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  border-radius: 12px;
+}
+
 .welcome-message h2 {
   color: #fff;
   margin-bottom: 0.5rem;

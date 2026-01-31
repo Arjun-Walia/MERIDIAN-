@@ -4,6 +4,7 @@ import ChatPane from './components/ChatPane/ChatPane';
 import ContextSidebar from './components/ContextSidebar/ContextSidebar';
 import ResultsViewer from './components/ResultsViewer/ResultsViewer';
 import { useChat } from './hooks/useChat';
+import logo from './assets/logo.png';
 
 function App() {
   const { 
@@ -18,7 +19,7 @@ function App() {
     <div className="app">
       <header className="app-header">
         <div className="logo">
-          <span className="logo-icon">🌐</span>
+          <img src={logo} alt="MERIDIAN Logo" className="logo-image" />
           <h1>MERIDIAN</h1>
         </div>
         <p className="tagline">Multi-Source AI Decision Assistant</p>

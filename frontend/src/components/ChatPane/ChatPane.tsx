@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './ChatPane.css';
 import { Message } from '../../types';
+import logo from '../../assets/logo.png';
 
 interface ChatPaneProps {
   messages: Message[];
@@ -33,7 +34,8 @@ const ChatPane: React.FC<ChatPaneProps> = ({ messages, onSendMessage, isLoading 
       <div className="messages-container">
         {messages.length === 0 ? (
           <div className="welcome-message">
-            <h2>👋 Welcome to MERIDIAN</h2>
+            <img src={logo} alt="MERIDIAN" className="welcome-logo" />
+            <h2>Welcome to MERIDIAN</h2>
             <p>Ask me complex questions that span multiple data sources.</p>
             <div className="example-queries">
               <p className="example-label">Try asking:</p>
