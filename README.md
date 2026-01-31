@@ -119,3 +119,294 @@ Chat UI (React)
   - Shows ranked options
   - Interactive filters & “what-if” tweaks
   - Evidence drill-down
+```
+
+Tech stack:
+
+- **Frontend**: React + TypeScript
+- **Backend**: Node.js + Express + TypeScript
+- **DB**: MongoDB
+- **AI/LLM**: Abstracted behind an “AI Service” (can be OpenAI, local model, etc.)
+
+---
+
+## 5. Core Features (MVP Scope)
+
+### 5.1 Source Configuration & Adapters
+
+Each external system (Jira, internal Mongo, Airtable, generic REST) is represented as a **DataSource** with:
+
+```ts
+type SourceType = 'jira' | 'mongodb' | 'airtable' | 'rest' | 'slack';
+```
+
+For each `DataSource`, an adapter implements a common interface:
+
+- `connect() / disconnect()`
+- `getSchema()`
+- `queryEntity(constraints, fields)`
+- `search(term, fields)`
+- `getEntity(id)`
+
+This makes the AI layer **source-agnostic**.
+
+### 5.2 Entity Resolution
+
+Goal: unify records like:
+
+- Jira user: `{ name: "John Smith", email: "john@company.com" }`
+- ATS candidate: `{ full_name: "John A. Smith", email: "john@company.com" }`
+- Slack user: `{ handle: "john_s", display_name: "john_s" }`
+
+Approach:
+
+- Compute similarity using:
+  - Levenshtein similarity on names.
+  - Exact match on email/phone when available.
+- If similarity > threshold → same canonical entity.
+- Persist mappings:
+
+```json
+{
+  "canonicalId": "person:john.smith@company.com",
+  "mappings": {
+    "jira-prod": "user-123",
+    "ats": "cand-456",
+    "slack": "U789"
+  },
+  "metadata": {
+    "email": "john.smith@company.com",
+    "name": "John Smith"
+  },
+  "confidence": 0.95
+}
+```
+
+### 5.3 Multi-Source Query Orchestration
+
+Example query:
+
+> “Show me developers who worked on authentication in the last 3 months, have no open P1 bugs, and salary < 80k.”
+
+Planner:
+
+- Determines relevant sources: Jira (issues), Bug tracker, HR DB.
+- Builds per-source constraint sets.
+- Creates an execution plan: which sources, in which priority, with what constraints.
+
+Executor:
+
+- Executes all critical source queries in parallel.
+- Collects raw results and normalizes them.
+- Handles partial failures (e.g., HR DB down → still show partial insights with warnings).
+
+### 5.4 Ranking & Explanation
+
+Each potential option (e.g., candidate) has:
+
+- A set of criteria (experience, salary, bug count, sentiment).
+- A score per criterion.
+- A weighted total score.
+
+UI shows:
+
+- Top N results with overall score.
+- On click, an **evidence panel**:
+  - Data fields from each source.
+  - How they impacted the score.
+  - Which constraints they satisfied/violated.
+
+### 5.5 Decision Logging & Learning
+
+When the user “commits” a decision (e.g., “Hire John Smith”):
+
+- Store:
+  - Question/context
+  - Constraints at that time
+  - Ranked options
+  - Chosen option
+  - Reasoning summary
+
+Later, the user can log outcomes (“John shipped 3 features; team feedback excellent”), enabling:
+
+- Retrospective analysis.
+- Adjusting ranking weights in the future.
+
+---
+
+## 6. Data Model (MongoDB – Sketch)
+
+Collections:
+
+- `data_sources` – connection info + schemas.
+- `entity_mappings` – canonical IDs and mappings.
+- `queries` – past user queries + plans + raw results (for debugging).
+- `decisions` – logged decisions + outcomes.
+- `interaction_logs` – conversation history (for learning/analytics).
+
+(You can flesh out exact schemas as you implement.)
+
+---
+
+## 7. Backend Responsibilities
+
+**Node.js + Express + TypeScript**
+
+- Expose a clean REST API (or GraphQL, if you prefer) for:
+  - `/api/sources` – CRUD for data sources.
+  - `/api/chat/query` – main chat endpoint.
+  - `/api/decisions` – decision logging.
+- Implement:
+  - Adapter layer per source.
+  - Query planner & executor.
+  - Entity deduplicator (Levenshtein + rule-based logic).
+  - Ranking engine and explanation builder.
+- Abstract AI provider:
+  - `aiService.generatePlan(...)`
+  - `aiService.summarizeExplanation(...)`
+  so you can swap LLMs easily.
+
+Security & infra (for production polish):
+
+- JWT-based auth.
+- Encrypted storage for API keys.
+- Rate limiting, logging, basic observability.
+
+---
+
+## 8. Frontend Responsibilities
+
+**React + TypeScript**
+
+Core pieces:
+
+1. **Chat / Conversation pane**
+   - Shows conversation with the assistant.
+   - Displays quick suggestions (“Do you want to filter by salary?”).
+   - Sends messages to `/api/chat/query`.
+
+2. **Context sidebar**
+   - Active constraints as removable “chips.”
+   - Connected data sources & their status.
+   - Summary of current decision context.
+
+3. **Results viewer**
+   - Card/list view of ranked options.
+   - Sort by score / name / custom criteria.
+
+4. **Evidence / Explainability panel**
+   - Source breakdown for each result.
+   - Constraint match indicators (✓ / ✗).
+   - Confidence visualization (e.g., circular progress).
+
+5. **Decision log**
+   - List of past decisions.
+   - Filter by status or outcome.
+   - Click to see the context in which the decision was made.
+
+The UI should feel **futuristic and premium**: think glassmorphism, smooth transitions, subtle motion when queries execute.
+
+---
+
+## 9. Feature Breakdown (Student / MVP Scope)
+
+You can scope phases roughly as:
+
+**Phase 1 (Weeks 1–2): Foundations**
+- Basic Express API.
+- MongoDB connection.
+- Simple Jira + Mongo adapter.
+- Hard-coded example query orchestrated across two sources.
+
+**Phase 2 (Week 3): Entity Resolution**
+- Implement entity mapping & deduplication.
+- Store canonical IDs.
+- Show merged entities in API responses.
+
+**Phase 3 (Week 4): Conversational Layer**
+- Simple intent detection (regex / heuristic).
+- Constraint extraction (e.g., “>3 years”, “<80k”).
+- Chat UI in React wired to backend.
+
+**Phase 4 (Week 5): Ranking & Explainability**
+- Criterion-based scoring.
+- Evidence panel in UI.
+- Confidence display.
+
+**Phase 5 (Week 6): Decision Logging & Polish**
+- Decision log API and UI.
+- Outcome capture.
+- Small UX refinements and performance tweaks.
+
+---
+
+## 10. What’s Patentable Here?
+
+If you wanted to argue for IP/patentability, your focus would be on:
+
+1. **Protocol for multi-source orchestration**
+   - How user intent is decomposed into per-source query plans and recomposed into a coherent answer.
+
+2. **Entity resolution + constraint propagation**
+   - Same canonical entity across systems.
+   - Constraints that span sources and trigger partial re-plans.
+
+3. **Explainability trace-back**
+   - A consistent mechanism to map final ranked decisions back to per-source evidence with confidence.
+
+4. **Outcome-driven model adaptation**
+   - System that tunes its own ranking criteria based on historical decision outcomes in a particular org context.
+
+Even if you don’t file anything, this is **excellent interview and portfolio material**.
+
+---
+
+## 11. Setup (Skeleton Instructions)
+
+You can adapt this to your own preference; here’s a quick outline.
+
+### Backend
+
+```bash
+mkdir backend && cd backend
+npm init -y
+npm install express cors mongoose dotenv
+npm install typescript ts-node-dev @types/node @types/express --save-dev
+
+npx tsc --init
+```
+
+Structure:
+
+```text
+backend/
+  src/
+    index.ts
+    routes/
+    services/
+    models/
+    types/
+```
+
+### Frontend
+
+```bash
+npx create-react-app frontend --template typescript
+cd frontend
+npm install axios
+```
+
+Structure:
+
+```text
+frontend/
+  src/
+    components/
+    hooks/
+    services/
+    types/
+```
+
+Wire `/api/chat/query` from frontend to backend and iterate.
+
+---
