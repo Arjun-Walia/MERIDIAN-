@@ -1,0 +1,75 @@
+.context-sidebar {
+  background: #141414;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+.sidebar-section {
+  margin-bottom: 2rem;
+}
+
+.sidebar-section h3 {
+  font-size: 0.85rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1rem;
+}
+
+.sources-list {
+  list-style: none;
+}
+
+.source-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.source-item:hover {
+  background: #222;
+}
+
+.source-icon {
+  font-size: 1.2rem;
+}
+
+.source-name {
+  flex: 1;
+  font-size: 0.9rem;
+}
+
+.source-status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.action-btn {
+  display: block;
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  margin-bottom: 0.5rem;
+  background: transparent;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #ccc;
+  font-size: 0.9rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.action-btn:hover {
+  background: #222;
+  border-color: #444;
+}
+
+.empty-state {
+  color: #555;
+  font-size: 0.85rem;
+  font-style: italic;
+}

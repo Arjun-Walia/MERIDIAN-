@@ -1,0 +1,62 @@
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-header {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #333;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo-icon {
+  font-size: 2rem;
+}
+
+.logo h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  background: linear-gradient(90deg, #00d4ff, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.tagline {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.app-main {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 280px 1fr 350px;
+  height: calc(100vh - 70px);
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  border-left: 1px solid #333;
+  border-right: 1px solid #333;
+}
+
+@media (max-width: 1200px) {
+  .app-main {
+    grid-template-columns: 1fr;
+  }
+  
+  .chat-container {
+    border: none;
+  }
+}

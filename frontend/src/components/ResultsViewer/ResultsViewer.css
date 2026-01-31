@@ -1,0 +1,108 @@
+.results-viewer {
+  background: #141414;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #333;
+}
+
+.results-header h3 {
+  font-size: 0.85rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.result-count {
+  font-size: 0.8rem;
+  color: #7c3aed;
+  background: rgba(124, 58, 237, 0.1);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+}
+
+.empty-results {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: #555;
+}
+
+.recommendations-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.recommendation-card {
+  background: #1a1a1a;
+  border: 1px solid #333;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.rec-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.rec-rank {
+  font-weight: 700;
+  color: #7c3aed;
+}
+
+.rec-name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.rec-score {
+  font-size: 0.85rem;
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.1);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.rec-explanation {
+  font-size: 0.9rem;
+  color: #aaa;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.rec-evidence h4 {
+  font-size: 0.75rem;
+  color: #666;
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.evidence-item {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  padding: 0.25rem 0;
+}
+
+.evidence-source {
+  color: #00d4ff;
+  font-weight: 500;
+}
+
+.evidence-text {
+  color: #888;
+}
