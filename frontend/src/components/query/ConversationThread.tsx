@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { ScrollArea } from '../ui/scroll-area';
 import { QueryMessage, ResponseMessage, type SourceSummary } from './Messages';
+import TextType from '../TextType';
 
 export interface Message {
   id: string;
@@ -82,10 +83,25 @@ function EmptyState() {
         Welcome to MERIDIAN
       </h2>
       
-      {/* Description - responsive max width */}
-      <p className="text-body-sm sm:text-body text-text-secondary max-w-sm sm:max-w-md mb-4 sm:mb-6">
-        Ask complex questions that span multiple data sources. Get ranked recommendations with full evidence trails.
-      </p>
+      {/* Typing animation description */}
+      <div className="text-body-sm sm:text-body text-text-secondary max-w-sm sm:max-w-md mb-4 sm:mb-6 min-h-[3rem]">
+        <TextType
+          text={[
+            "Ask complex questions that span multiple data sources.",
+            "Get ranked recommendations with full evidence trails.",
+            "Discover insights from GitHub, Jira, and Slack.",
+            "Make data-driven decisions with confidence."
+          ]}
+          typingSpeed={40}
+          deletingSpeed={25}
+          pauseDuration={2500}
+          loop={true}
+          showCursor={true}
+          cursorCharacter="|"
+          cursorClassName="text-blue-500"
+          className="inline"
+        />
+      </div>
       
       {/* Example queries container - responsive grid */}
       <div className="w-full max-w-sm sm:max-w-md lg:max-w-lg">

@@ -169,13 +169,13 @@ function App() {
   }, []);
 
   return (
-    <div className="relative">
-      {/* Aurora Background */}
-      <div className="fixed inset-0 -z-10 opacity-30">
+    <div className="relative min-h-screen">
+      {/* Aurora Background - Dark blue theme with smooth edges */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
         <Aurora
-          colorStops={["#6366f1", "#8b5cf6", "#3b82f6"]}
-          blend={0.3}
-          amplitude={0.8}
+          colorStops={["#0F172A", "#1E3A8A", "#1D4ED8"]}
+          blend={0.5}
+          amplitude={1.0}
           speed={0.5}
         />
       </div>

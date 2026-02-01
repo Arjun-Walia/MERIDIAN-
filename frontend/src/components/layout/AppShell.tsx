@@ -27,7 +27,7 @@ export function AppShell({
 }: AppShellProps) {
   return (
     <TooltipProvider delayDuration={0}>
-      <div className="flex flex-col lg:flex-row h-screen bg-base text-text-primary overflow-hidden">
+      <div className="flex flex-col lg:flex-row h-screen bg-transparent text-text-primary overflow-hidden relative z-10">
         {/* Mobile Navigation - visible only on screens < lg (1024px) */}
         <MobileNav
           activeId={activeNavId}
@@ -47,7 +47,7 @@ export function AppShell({
         </div>
         
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-base">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-base/80 backdrop-blur-sm">
           {/* Main content */}
           <main id="main-content" className="flex-1 flex overflow-hidden" tabIndex={-1}>
             {/* Center content area - full width with minimal padding */}

@@ -13,12 +13,14 @@
   }
 
   html {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Fira Code', monospace;
+    font-optical-sizing: auto;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
   body {
+    font-family: 'Fira Code', monospace;
     background-color: rgb(var(--bg-base));
     color: rgb(var(--text-primary));
     min-height: 100vh;
