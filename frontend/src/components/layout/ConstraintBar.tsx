@@ -129,7 +129,7 @@ function FilterChip({ constraint, onRemove }: FilterChipProps) {
         // Hover state - subtle highlight
         'hover:bg-zinc-800/80 hover:border-zinc-600',
         // Focus state - visible ring
-        'focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-base',
+        'focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950',
         // Transition
         'transition-colors duration-150 cursor-default'
       )}

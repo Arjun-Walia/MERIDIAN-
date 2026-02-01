@@ -28,47 +28,42 @@ export function ResultCard({ entity, isSelected = false, onClick }: ResultCardPr
     <button
       onClick={onClick}
       className={cn(
-        'w-full text-left p-4 rounded-lg border transition-all',
-        'hover:border-border-subtle',
-        'focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-base',
+        'w-full text-left p-4 rounded-lg border transition-all duration-200',
+        'hover:border-zinc-600 hover:bg-zinc-800/50',
+        'focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-zinc-900',
         isSelected
-          ? 'bg-accent/10 border-accent/30 border-l-2 border-l-accent'
-          : 'bg-surface border-border-default'
+          ? 'bg-cyan-500/10 border-cyan-500/50 border-l-4 border-l-cyan-500'
+          : 'bg-zinc-800/60 border-zinc-700/50'
       )}
     >
       <div className="flex items-start gap-4">
-        {/* Rank Badge */}
-        <RankBadge rank={entity.rank} movement={entity.movement} />
+        {/* Rank Badge - Fixed width */}
+        <div className="flex-shrink-0">
+          <RankBadge rank={entity.rank} movement={entity.movement} />
+        </div>
         
-        {/* Main Content */}
+        {/* Main Content - Flex grow */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <h3 className="text-heading-md text-text-primary truncate">
-                {entity.name}
-              </h3>
-              <p className="text-body-sm text-text-secondary truncate">
-                {entity.title}
-                {entity.subtitle && (
-                  <span className="text-text-tertiary"> · {entity.subtitle}</span>
-                )}
-              </p>
-            </div>
-            
-            {/* Score */}
-            <ScoreRing score={entity.score} size="sm" />
-          </div>
+          <h3 className="text-base font-semibold text-white truncate mb-1">
+            {entity.name}
+          </h3>
+          <p className="text-sm text-zinc-400 truncate mb-2">
+            {entity.title}
+            {entity.subtitle && (
+              <span className="text-zinc-500"> · {entity.subtitle}</span>
+            )}
+          </p>
           
           {/* Attributes */}
           {entity.attributes.length > 0 && (
-            <div className="mt-3">
+            <div className="mt-2">
               <AttributeList attributes={entity.attributes} />
             </div>
           )}
           
           {/* Metadata */}
           {entity.metadata && Object.keys(entity.metadata).length > 0 && (
-            <div className="mt-2 flex items-center gap-3 text-body-sm text-text-tertiary">
+            <div className="mt-2 flex items-center gap-3 text-xs text-zinc-500">
               {Object.entries(entity.metadata).map(([key, value]) => (
                 <span key={key}>{value}</span>
               ))}
@@ -76,11 +71,14 @@ export function ResultCard({ entity, isSelected = false, onClick }: ResultCardPr
           )}
         </div>
         
-        {/* Chevron */}
-        <ChevronRight className={cn(
-          'w-5 h-5 text-text-tertiary flex-shrink-0 transition-transform',
-          isSelected && 'text-accent transform translate-x-0.5'
-        )} />
+        {/* Score and Chevron - Right aligned */}
+        <div className="flex-shrink-0 flex flex-col items-center gap-2">
+          <ScoreRing score={entity.score} size="sm" />
+          <ChevronRight className={cn(
+            'w-5 h-5 text-zinc-500 transition-all',
+            isSelected && 'text-cyan-400 translate-x-0.5'
+          )} />
+        </div>
       </div>
     </button>
   );

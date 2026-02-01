@@ -26,6 +26,18 @@
     min-height: 100vh;
   }
 
+  /* Force white text on inputs and textareas */
+  input,
+  textarea {
+    font-family: 'Fira Code', monospace;
+    color: #ffffff !important;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    color: #a1a1aa !important;
+  }
+
   /* Custom scrollbar */
   ::-webkit-scrollbar {
     width: 8px;

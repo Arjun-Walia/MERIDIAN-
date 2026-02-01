@@ -113,8 +113,21 @@ function App() {
   const [isLoading, setIsLoading] = useState(false);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [activeNavId, setActiveNavId] = useState('dashboard');
+  const [queryInputValue, setQueryInputValue] = useState('');
 
   const selectedEntity = results.find(r => r.id === selectedEntityId) || null;
+
+  // Available filter options
+  const filterOptions = [
+    { field: 'status', operator: 'eq', value: 'Active' },
+    { field: 'status', operator: 'eq', value: 'Inactive' },
+    { field: 'experience', operator: 'gte', value: '3 years' },
+    { field: 'experience', operator: 'gte', value: '5 years' },
+    { field: 'priority', operator: 'eq', value: 'High' },
+    { field: 'priority', operator: 'eq', value: 'Medium' },
+    { field: 'bugs', operator: 'eq', value: 'No P1 bugs' },
+    { field: 'department', operator: 'eq', value: 'Engineering' },
+  ];
 
   const handleNavigate = useCallback((id: string) => {
     setActiveNavId(id);
@@ -155,17 +168,29 @@ function App() {
   }, []);
 
   const handleAddConstraint = useCallback(() => {
-    const newConstraint: Constraint = {
-      id: Date.now().toString(),
-      field: 'status',
-      operator: 'eq',
-      value: 'Active',
-    };
-    setConstraints(prev => [...prev, newConstraint]);
-  }, []);
+    // Find a filter option that isn't already added
+    const existingFilters = constraints.map(c => `${c.field}-${c.operator}-${c.value}`);
+    const availableFilter = filterOptions.find(
+      opt => !existingFilters.includes(`${opt.field}-${opt.operator}-${opt.value}`)
+    );
+    
+    if (availableFilter) {
+      const newConstraint: Constraint = {
+        id: Date.now().toString(),
+        field: availableFilter.field,
+        operator: availableFilter.operator,
+        value: availableFilter.value,
+      };
+      setConstraints(prev => [...prev, newConstraint]);
+    }
+  }, [constraints, filterOptions]);
 
   const handleRemoveConstraint = useCallback((id: string) => {
     setConstraints(prev => prev.filter(c => c.id !== id));
+  }, []);
+
+  const handleExampleClick = useCallback((query: string) => {
+    setQueryInputValue(query);
   }, []);
 
   return (
@@ -208,40 +233,51 @@ function App() {
           ) : null
         }
       >
-        {/* Main Content Area - Centered Layout */}
-        <div className="flex-1 flex flex-col h-full">
-          {/* Scrollable content area with centering */}
-          <div className="flex-1 flex flex-col overflow-auto">
-            <div className="flex-1 flex justify-center w-full">
-              <div className="w-full max-w-3xl">
-                {/* Conversation Thread */}
+        {/* Main Content Area - Proper Layout with Fixed Input */}
+        <div className="flex-1 flex flex-col h-full overflow-hidden">
+          {/* Scrollable content area */}
+          <div className="flex-1 overflow-y-auto">
+            {/* Conversation Thread */}
+            <div className="flex justify-center w-full">
+              <div className="w-full max-w-3xl px-4 pt-4">
                 <ConversationThread 
                   messages={messages} 
                   isLoading={isLoading}
                   loadingSources={mockSourceSummaries}
+                  onExampleClick={handleExampleClick}
                 />
               </div>
             </div>
+            
+            {/* Results List - appears after query */}
+            {results.length > 0 && (
+              <div className="border-t border-zinc-700/50 mt-4">
+                <div className="max-w-4xl mx-auto">
+                  <ResultsList
+                    results={results}
+                    selectedId={selectedEntityId}
+                    onSelect={handleSelectEntity}
+                  />
+                </div>
+              </div>
+            )}
+            
+            {/* Bottom spacer to prevent content from hiding behind input */}
+            <div className="h-28" />
           </div>
           
-          {/* Results List - appears after query */}
-          {results.length > 0 && (
-            <div className="border-t border-border-default max-h-[40vh]">
-              <ResultsList
-                results={results}
-                selectedId={selectedEntityId}
-                onSelect={handleSelectEntity}
-              />
-            </div>
-          )}
-          
-          {/* Query Input - fixed at bottom with centering */}
-          <div className="bg-base">
-            <div className="max-w-3xl mx-auto px-4 py-4">
+          {/* Query Input - Fixed at bottom */}
+          <div className="flex-shrink-0 pt-4 pb-4">
+            <div className="max-w-3xl mx-auto px-4">
               <QueryInput
-                onSubmit={handleSendMessage}
+                onSubmit={(query) => {
+                  handleSendMessage(query);
+                  setQueryInputValue('');
+                }}
                 isLoading={isLoading}
                 placeholder="Ask MERIDIAN to analyze and rank options..."
+                value={queryInputValue}
+                onChange={setQueryInputValue}
               />
             </div>
           </div>

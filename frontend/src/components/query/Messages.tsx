@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { cn } from '../../lib/utils';
 import { formatRelativeTime } from '../../lib/utils';
-import { Badge } from '../ui/badge';
 import { getSourceIcon } from '../../lib/icons';
 import { CheckCircle, AlertCircle, Loader2, Sparkles } from 'lucide-react';
 
@@ -19,10 +18,10 @@ interface QueryMessageProps {
 
 export function QueryMessage({ content, timestamp }: QueryMessageProps) {
   return (
-    <div className="flex justify-end">
-      <div className="max-w-[80%] bg-accent/15 border border-accent/20 rounded-lg px-4 py-3">
-        <p className="text-body text-text-primary">{content}</p>
-        <span className="text-caption text-text-tertiary mt-1 block">
+    <div className="flex justify-end mb-4">
+      <div className="max-w-[85%] sm:max-w-[70%] bg-gradient-to-r from-blue-900/80 to-blue-800/80 border border-blue-700/50 rounded-xl px-4 py-3 shadow-lg">
+        <p className="text-sm sm:text-base text-white leading-relaxed">{content}</p>
+        <span className="text-xs text-blue-300/70 mt-2 block text-right">
           {formatRelativeTime(timestamp)}
         </span>
       </div>
@@ -98,27 +97,31 @@ export function ResponseMessage({
   }
 
   return (
-    <div className="flex justify-start">
-      <div className="max-w-[80%] bg-surface border border-border-default rounded-lg px-4 py-3">
-        <p className="text-body text-text-primary">{summary}</p>
+    <div className="flex justify-start mb-4">
+      <div className="max-w-[90%] sm:max-w-[80%] bg-zinc-800/60 border border-zinc-700/50 rounded-xl px-4 py-4 shadow-lg">
+        {/* Summary text */}
+        <p className="text-sm sm:text-base text-zinc-100 leading-relaxed mb-4">{summary}</p>
         
-        {resultCount > 0 && (
-          <p className="text-body-sm text-text-secondary mt-2">
-            Found <span className="font-medium text-text-primary">{resultCount}</span> results
-          </p>
-        )}
-        
+        {/* Source badges - larger and more prominent */}
         {sources.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mb-3">
             {sources.map((source) => (
               <SourcePill key={source.id} source={source} />
             ))}
           </div>
         )}
         
-        <span className="text-caption text-text-tertiary mt-2 block">
-          {formatRelativeTime(timestamp)}
-        </span>
+        {/* Results count and timestamp - more prominent */}
+        <div className="flex items-center justify-between pt-2 border-t border-zinc-700/50">
+          {resultCount > 0 && (
+            <p className="text-sm text-zinc-400 whitespace-nowrap">
+              Found <span className="font-semibold text-cyan-400">{resultCount}</span> results
+            </p>
+          )}
+          <span className="text-xs text-zinc-500">
+            {formatRelativeTime(timestamp)}
+          </span>
+        </div>
       </div>
     </div>
   );
@@ -132,23 +135,23 @@ function SourcePill({ source }: SourcePillProps) {
   const Icon = getSourceIcon(source.id);
   
   const statusConfig = {
-    success: { icon: CheckCircle, color: 'text-success' },
-    partial: { icon: AlertCircle, color: 'text-warning' },
-    failed: { icon: AlertCircle, color: 'text-error' },
-    loading: { icon: Loader2, color: 'text-text-secondary' },
+    success: { icon: CheckCircle, color: 'text-green-400' },
+    partial: { icon: AlertCircle, color: 'text-yellow-400' },
+    failed: { icon: AlertCircle, color: 'text-red-400' },
+    loading: { icon: Loader2, color: 'text-zinc-400' },
   };
 
   const config = statusConfig[source.status];
   const StatusIcon = config.icon;
 
   return (
-    <Badge variant="outline" className="flex items-center gap-1.5">
-      <Icon className="w-3.5 h-3.5 text-text-tertiary" />
-      <span>{source.name}</span>
+    <div className="flex items-center gap-2 bg-zinc-700/80 border border-zinc-600/50 px-3 py-1.5 rounded-lg">
+      <Icon className="w-4 h-4 text-zinc-300" />
+      <span className="text-sm font-medium text-white">{source.name}</span>
       {source.recordCount > 0 && (
-        <span className="text-text-tertiary">({source.recordCount})</span>
+        <span className="text-xs text-zinc-400">({source.recordCount})</span>
       )}
-      <StatusIcon className={cn('w-3 h-3', config.color, source.status === 'loading' && 'animate-spin')} />
-    </Badge>
+      <StatusIcon className={cn('w-4 h-4', config.color, source.status === 'loading' && 'animate-spin')} />
+    </div>
   );
 }

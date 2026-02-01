@@ -17,20 +17,35 @@ interface QueryInputProps {
   isLoading?: boolean;
   placeholder?: string;
   loadingStage?: number; // 0, 1, 2 for different stages
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
 export function QueryInput({ 
   onSubmit, 
   isLoading = false, 
   placeholder,
-  loadingStage = 0 
+  loadingStage = 0,
+  value: controlledValue,
+  onChange: controlledOnChange
 }: QueryInputProps) {
-  const [value, setValue] = React.useState('');
+  const [internalValue, setInternalValue] = React.useState('');
   const [internalStage, setInternalStage] = React.useState(0);
   const inputRef = React.useRef<HTMLTextAreaElement>(null);
   const inputId = React.useId();
   const hintId = React.useId();
   const statusId = React.useId();
+
+  // Support both controlled and uncontrolled modes
+  const isControlled = controlledValue !== undefined;
+  const value = isControlled ? controlledValue : internalValue;
+  const setValue = (newValue: string) => {
+    if (isControlled && controlledOnChange) {
+      controlledOnChange(newValue);
+    } else {
+      setInternalValue(newValue);
+    }
+  };
 
   const characterCount = value.length;
   const isOverLimit = characterCount > MAX_CHARACTERS;
@@ -80,7 +95,7 @@ export function QueryInput({
       {/* Main input container - responsive layout */}
       <div 
         className={cn(
-          'relative bg-base',
+          'relative bg-transparent',
           // Flex layout - stack on very small screens, row on larger
           'flex flex-col xs:flex-row items-stretch xs:items-center gap-2'
         )}
@@ -98,15 +113,17 @@ export function QueryInput({
           aria-label="Query input"
           aria-describedby={`${hintId} ${statusId}`}
           aria-busy={isLoading}
+          style={{ color: '#ffffff', caretColor: '#ffffff' }}
           className={cn(
-            // Base styles - bg-base background with border, no scrollbar
-            'flex-1 bg-base text-body text-text-primary resize-none rounded-lg overflow-hidden',
-            'border border-border-default',
+            // Base styles - transparent background with border, white text
+            'flex-1 bg-transparent resize-none rounded-lg overflow-hidden',
+            '!text-white',
+            'border border-zinc-700',
             'min-h-[44px] sm:min-h-[40px]',
             // Responsive padding
             'py-3 px-3 sm:py-2.5 sm:px-4',
-            // WCAG AA compliant placeholder
-            'placeholder:text-zinc-400',
+            // Placeholder styling
+            'placeholder:!text-zinc-400',
             'placeholder:text-xs sm:placeholder:text-sm',
             // Focus styles - ring and border change
             'focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500/50',
@@ -139,10 +156,10 @@ export function QueryInput({
             <span 
               id={hintId}
               className={cn(
-                'text-caption tabular-nums transition-colors',
+                'text-xs tabular-nums transition-colors',
                 // Hide on very small screens to save space
                 'hidden xs:inline',
-                isOverLimit ? 'text-error font-medium' : 'text-text-muted'
+                isOverLimit ? 'text-red-400 font-medium' : 'text-zinc-400'
               )}
               aria-live="polite"
             >
@@ -188,13 +205,13 @@ export function QueryInput({
         >
           <div className={cn(
             'flex items-center gap-2 sm:gap-3',
-            'px-3 sm:px-4 py-2 bg-surface-alt/50 border border-border-default rounded-full',
+            'px-3 sm:px-4 py-2 bg-zinc-800/50 border border-zinc-700 rounded-full',
             // Responsive text sizing
-            'text-caption sm:text-body-sm'
+            'text-xs sm:text-sm'
           )}>
             <StageIcon className="w-4 h-4 text-cyan-400 animate-pulse flex-shrink-0" />
             {/* Hide message on very small screens, show abbreviated on mobile */}
-            <span className="text-text-secondary hidden xs:inline truncate max-w-[200px] sm:max-w-none">
+            <span className="text-zinc-300 hidden xs:inline truncate max-w-[200px] sm:max-w-none">
               {currentStage.message}
             </span>
             {/* Progress dots */}

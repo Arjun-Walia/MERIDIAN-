@@ -12,9 +12,9 @@ export function ScoreRing({ score, max = 100, size = 'md', showLabel = true }: S
   const percentage = Math.min((score / max) * 100, 100);
   
   const sizes = {
-    sm: { container: 'w-10 h-10', stroke: 3, fontSize: 'text-caption' },
-    md: { container: 'w-14 h-14', stroke: 4, fontSize: 'text-body-sm' },
-    lg: { container: 'w-20 h-20', stroke: 5, fontSize: 'text-body' },
+    sm: { container: 'w-12 h-12', stroke: 3, fontSize: 'text-sm' },
+    md: { container: 'w-14 h-14', stroke: 4, fontSize: 'text-base' },
+    lg: { container: 'w-20 h-20', stroke: 5, fontSize: 'text-lg' },
   };
 
   const config = sizes[size];
@@ -23,9 +23,15 @@ export function ScoreRing({ score, max = 100, size = 'md', showLabel = true }: S
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
   const getScoreColor = (score: number) => {
-    if (score >= 80) return 'text-success';
-    if (score >= 60) return 'text-warning';
-    return 'text-error';
+    if (score >= 80) return 'text-green-400';
+    if (score >= 60) return 'text-yellow-400';
+    return 'text-red-400';
+  };
+
+  const getStrokeColor = (score: number) => {
+    if (score >= 80) return 'stroke-green-400';
+    if (score >= 60) return 'stroke-yellow-400';
+    return 'stroke-red-400';
   };
 
   return (
@@ -37,9 +43,8 @@ export function ScoreRing({ score, max = 100, size = 'md', showLabel = true }: S
           cy="50"
           r={radius}
           fill="none"
-          stroke="currentColor"
           strokeWidth={config.stroke}
-          className="text-border-default"
+          className="stroke-zinc-700"
         />
         {/* Progress circle */}
         <circle
@@ -47,17 +52,16 @@ export function ScoreRing({ score, max = 100, size = 'md', showLabel = true }: S
           cy="50"
           r={radius}
           fill="none"
-          stroke="currentColor"
           strokeWidth={config.stroke}
           strokeLinecap="round"
           strokeDasharray={circumference}
           strokeDashoffset={strokeDashoffset}
-          className={cn('transition-all duration-500', getScoreColor(score))}
+          className={cn('transition-all duration-500', getStrokeColor(score))}
         />
       </svg>
       {showLabel && (
         <div className={cn(
-          'absolute inset-0 flex items-center justify-center font-semibold',
+          'absolute inset-0 flex items-center justify-center font-bold',
           config.fontSize,
           getScoreColor(score)
         )}>

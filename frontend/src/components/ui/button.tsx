@@ -18,7 +18,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       // Smooth transitions for all state changes
       'transition-all duration-200 ease-out',
       // Focus ring - visible cyan outline with offset
-      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-base',
+      'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950',
       // Disabled state - consistent across all variants
       'disabled:cursor-not-allowed disabled:opacity-50 disabled:pointer-events-none'
     );

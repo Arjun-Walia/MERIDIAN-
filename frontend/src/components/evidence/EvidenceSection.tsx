@@ -34,7 +34,7 @@ export function EvidenceSection({
         <button className={cn(
           'w-full flex items-center justify-between p-3 rounded-lg',
           'bg-surface-alt hover:bg-surface-alt/80 transition-colors',
-          'text-left focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-base'
+          'text-left focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-zinc-950'
         )}>
           <div className="flex items-center gap-3">
             <SourceIcon className="w-4 h-4 text-text-secondary" />

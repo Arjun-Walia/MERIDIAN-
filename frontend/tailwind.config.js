@@ -16,8 +16,8 @@ module.exports = {
     },
     extend: {
       colors: {
-        // Backgrounds
-        base: 'rgb(var(--bg-base) / <alpha-value>)',
+        // Backgrounds - renamed 'base' to 'bg-base' to avoid conflict with text-base font size
+        'bg-base': 'rgb(var(--bg-base) / <alpha-value>)',
         surface: 'rgb(var(--bg-surface) / <alpha-value>)',
         'surface-alt': 'rgb(var(--bg-surface-alt) / <alpha-value>)',
         elevated: 'rgb(var(--bg-elevated) / <alpha-value>)',

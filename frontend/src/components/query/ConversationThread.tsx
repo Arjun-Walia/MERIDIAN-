@@ -16,12 +16,14 @@ interface ConversationThreadProps {
   messages: Message[];
   isLoading?: boolean;
   loadingSources?: SourceSummary[];
+  onExampleClick?: (query: string) => void;
 }
 
 export function ConversationThread({ 
   messages, 
   isLoading, 
-  loadingSources = [] 
+  loadingSources = [],
+  onExampleClick
 }: ConversationThreadProps) {
   const scrollRef = React.useRef<HTMLDivElement>(null);
 
@@ -32,7 +34,7 @@ export function ConversationThread({
   }, [messages, isLoading]);
 
   if (messages.length === 0 && !isLoading) {
-    return <EmptyState />;
+    return <EmptyState onExampleClick={onExampleClick} />;
   }
 
   return (
@@ -70,7 +72,7 @@ export function ConversationThread({
   );
 }
 
-function EmptyState() {
+function EmptyState({ onExampleClick }: { onExampleClick?: (query: string) => void }) {
   return (
     <div className="flex-1 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 text-center">
       {/* Logo - responsive sizing */}
@@ -117,13 +119,13 @@ function EmptyState() {
           - Desktop (1024px+): Can be 2 columns if desired
         */}
         <div className="grid grid-cols-1 gap-2 sm:gap-3">
-          <ExampleQuery>
+          <ExampleQuery onClick={onExampleClick}>
             Who is the best engineer to lead the authentication project?
           </ExampleQuery>
-          <ExampleQuery>
+          <ExampleQuery onClick={onExampleClick}>
             Show candidates with 3+ years experience and no P1 bugs
           </ExampleQuery>
-          <ExampleQuery>
+          <ExampleQuery onClick={onExampleClick}>
             Compare top 5 vendors by cost and reliability metrics
           </ExampleQuery>
         </div>
@@ -132,9 +134,16 @@ function EmptyState() {
   );
 }
 
-function ExampleQuery({ children }: { children: React.ReactNode }) {
+function ExampleQuery({ children, onClick }: { children: React.ReactNode; onClick?: (query: string) => void }) {
+  const handleClick = () => {
+    if (onClick && typeof children === 'string') {
+      onClick(children);
+    }
+  };
+
   return (
     <button 
+      onClick={handleClick}
       className={[
         // Base styles - responsive padding
         'w-full text-left py-2.5 px-3 sm:py-3 sm:px-4 rounded-lg',
@@ -145,7 +154,7 @@ function ExampleQuery({ children }: { children: React.ReactNode }) {
         'hover:text-zinc-50 hover:border-cyan-500/50 hover:bg-zinc-800',
         'hover:shadow-lg hover:shadow-cyan-500/5 sm:hover:scale-[1.02]',
         // Focus state - visible ring
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-base',
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 focus-visible:ring-offset-zinc-950',
         // Active state
         'active:scale-[0.99] active:bg-zinc-700',
         // Smooth transitions

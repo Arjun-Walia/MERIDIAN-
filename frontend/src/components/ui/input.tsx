@@ -24,7 +24,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             // WCAG AA compliant placeholder - zinc-400 has 4.64:1 contrast on zinc-900
             'placeholder:text-zinc-400',
             // Enhanced focus ring - 2px cyan with offset for clear visibility
-            'focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-base focus:border-cyan-500',
+            'focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:ring-offset-2 focus:ring-offset-zinc-950 focus:border-cyan-500',
             // Disabled state
             'disabled:cursor-not-allowed disabled:opacity-50',
             // Smooth transitions

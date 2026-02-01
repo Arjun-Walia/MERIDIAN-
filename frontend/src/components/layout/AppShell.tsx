@@ -47,7 +47,7 @@ export function AppShell({
         </div>
         
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-base/80 backdrop-blur-sm">
+        <div className="flex-1 flex flex-col min-w-0 min-h-0 bg-zinc-950/80 backdrop-blur-sm">
           {/* Main content */}
           <main id="main-content" className="flex-1 flex overflow-hidden" tabIndex={-1}>
             {/* Center content area - full width with minimal padding */}
