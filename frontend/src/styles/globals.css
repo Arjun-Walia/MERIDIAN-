@@ -38,10 +38,10 @@
     color: #a1a1aa !important;
   }
 
-  /* Custom scrollbar */
+  /* Custom scrollbar - thin and subtle */
   ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
   }
 
   ::-webkit-scrollbar-track {
@@ -49,12 +49,28 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgb(var(--border-subtle));
-    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--border-strong));
+    background: rgba(255, 255, 255, 0.2);
+  }
+
+  /* Hide scrollbar but keep functionality */
+  .scrollbar-hidden {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Firefox scrollbar */
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.1) transparent;
   }
 
   /* Focus styles */

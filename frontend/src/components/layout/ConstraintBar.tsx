@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { X, Plus, Filter } from 'lucide-react';
+import { X, Filter, ChevronDown } from 'lucide-react';
 import { Button } from '../ui/button';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '../../lib/utils';
@@ -11,13 +11,59 @@ export interface Constraint {
   value: string;
 }
 
-interface ConstraintBarProps {
-  constraints: Constraint[];
-  onRemove: (id: string) => void;
-  onAddClick: () => void;
+export interface FilterOption {
+  field: string;
+  operator: string;
+  value: string;
 }
 
-export function ConstraintBar({ constraints, onRemove, onAddClick }: ConstraintBarProps) {
+interface ConstraintBarProps {
+  constraints: Constraint[];
+  filterOptions: FilterOption[];
+  onRemove: (id: string) => void;
+  onAddFilter: (filter: FilterOption) => void;
+}
+
+export function ConstraintBar({ constraints, filterOptions, onRemove, onAddFilter }: ConstraintBarProps) {
+  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
+
+  // Get available filters (not already added)
+  const existingFilters = constraints.map(c => `${c.field}-${c.operator}-${c.value}`);
+  const availableFilters = filterOptions.filter(
+    opt => !existingFilters.includes(`${opt.field}-${opt.operator}-${opt.value}`)
+  );
+
+  // Close dropdown when clicking outside
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSelectFilter = (filter: FilterOption) => {
+    onAddFilter(filter);
+    setIsDropdownOpen(false);
+  };
+
+  const formatOperator = (op: string) => {
+    const operators: Record<string, string> = {
+      'eq': '=',
+      'neq': '≠',
+      'gt': '>',
+      'gte': '≥',
+      'lt': '<',
+      'lte': '≤',
+      'contains': '∋',
+      'in': '∈',
+    };
+    return operators[op] || op;
+  };
+
   return (
     <div className={cn(
       // Compact on mobile, normal on desktop
@@ -57,19 +103,68 @@ export function ConstraintBar({ constraints, onRemove, onAddClick }: ConstraintB
         </AnimatePresence>
       </div>
       
-      {/* Add Filter button - compact on mobile */}
-      <Button 
-        variant="default" 
-        size="sm"
-        onClick={onAddClick}
-        className={cn(
-          'h-8 sm:h-10 border-dashed hover:border-cyan-500/50 hover:text-cyan-400',
-          'flex-shrink-0 px-2 sm:px-3'
-        )}
-      >
-        <Plus className="w-4 h-4 sm:mr-1" />
-        <span className="hidden sm:inline">Add Filter</span>
-      </Button>
+      {/* Add Filter dropdown */}
+      <div className="relative z-50" ref={dropdownRef}>
+        <Button 
+          variant="default" 
+          size="sm"
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+          disabled={availableFilters.length === 0}
+          className={cn(
+            'h-8 sm:h-10 border-dashed hover:border-cyan-500/50 hover:text-cyan-400',
+            'flex-shrink-0 px-2 sm:px-3',
+            isDropdownOpen && 'border-cyan-500/50 text-cyan-400'
+          )}
+        >
+          <span className="sm:inline">Add Filter</span>
+          <ChevronDown className={cn(
+            'w-4 h-4 ml-1 transition-transform duration-200',
+            isDropdownOpen && '-rotate-180'
+          )} />
+        </Button>
+        
+        {/* Dropdown menu - opens upward */}
+        <AnimatePresence>
+          {isDropdownOpen && availableFilters.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, y: 8, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.95 }}
+              transition={{ duration: 0.15 }}
+              className={cn(
+                'absolute right-0 bottom-full mb-2 z-[100]',
+                'min-w-[220px] max-h-[300px] overflow-y-auto',
+                'bg-zinc-900 backdrop-blur-lg',
+                'border border-zinc-700/50 rounded-lg shadow-xl',
+                'py-1',
+                'pointer-events-auto'
+              )}
+            >
+              {availableFilters.map((filter, index) => {
+                const filterKey = `${filter.field}-${filter.operator}-${filter.value}`;
+                return (
+                  <button
+                    key={filterKey}
+                    onClick={() => handleSelectFilter(filter)}
+                    className={cn(
+                      'w-full px-3 py-2 text-left',
+                      'flex items-center gap-2',
+                      'text-body-sm text-zinc-300',
+                      'hover:bg-zinc-800 hover:text-white',
+                      'transition-colors duration-100',
+                      'focus:outline-none focus:bg-zinc-800'
+                    )}
+                  >
+                    <span className="text-cyan-400 font-medium">{filter.field}</span>
+                    <span className="text-zinc-500">{formatOperator(filter.operator)}</span>
+                    <span className="text-zinc-100">{filter.value}</span>
+                  </button>
+                );
+              })}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 }

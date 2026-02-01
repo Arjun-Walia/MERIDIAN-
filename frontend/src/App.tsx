@@ -4,7 +4,7 @@ import './styles/globals.css';
 // Layout components
 import { AppShell } from './components/layout/AppShell';
 import { DetailPanel } from './components/layout/DetailPanel';
-import { ConstraintBar, type Constraint } from './components/layout/ConstraintBar';
+import { ConstraintBar, type Constraint, type FilterOption } from './components/layout/ConstraintBar';
 
 // Query components
 import { QueryInput } from './components/query/QueryInput';
@@ -16,6 +16,11 @@ import { ResultsList, type RankedEntity } from './components/results';
 
 // Evidence components
 import { EntityDetail, type ConstraintCheck, type ScoreComponent } from './components/evidence';
+
+// Views
+import { DataSourcesView } from './components/views/DataSourcesView';
+import { HistoryView } from './components/views/HistoryView';
+import { SettingsView } from './components/views/SettingsView';
 
 // Other components
 import Aurora from './components/Aurora';
@@ -118,7 +123,7 @@ function App() {
   const selectedEntity = results.find(r => r.id === selectedEntityId) || null;
 
   // Available filter options
-  const filterOptions = [
+  const filterOptions: FilterOption[] = [
     { field: 'status', operator: 'eq', value: 'Active' },
     { field: 'status', operator: 'eq', value: 'Inactive' },
     { field: 'experience', operator: 'gte', value: '3 years' },
@@ -167,23 +172,15 @@ function App() {
     setIsDetailOpen(true);
   }, []);
 
-  const handleAddConstraint = useCallback(() => {
-    // Find a filter option that isn't already added
-    const existingFilters = constraints.map(c => `${c.field}-${c.operator}-${c.value}`);
-    const availableFilter = filterOptions.find(
-      opt => !existingFilters.includes(`${opt.field}-${opt.operator}-${opt.value}`)
-    );
-    
-    if (availableFilter) {
-      const newConstraint: Constraint = {
-        id: Date.now().toString(),
-        field: availableFilter.field,
-        operator: availableFilter.operator,
-        value: availableFilter.value,
-      };
-      setConstraints(prev => [...prev, newConstraint]);
-    }
-  }, [constraints, filterOptions]);
+  const handleAddConstraint = useCallback((filter: { field: string; operator: string; value: string }) => {
+    const newConstraint: Constraint = {
+      id: Date.now().toString(),
+      field: filter.field,
+      operator: filter.operator,
+      value: filter.value,
+    };
+    setConstraints(prev => [...prev, newConstraint]);
+  }, []);
 
   const handleRemoveConstraint = useCallback((id: string) => {
     setConstraints(prev => prev.filter(c => c.id !== id));
@@ -210,11 +207,14 @@ function App() {
         activeNavId={activeNavId}
         onNavigate={handleNavigate}
         constraintBar={
-          <ConstraintBar
-            constraints={constraints}
-            onRemove={handleRemoveConstraint}
-            onAddClick={handleAddConstraint}
-          />
+          activeNavId === 'dashboard' ? (
+            <ConstraintBar
+              constraints={constraints}
+              filterOptions={filterOptions}
+              onRemove={handleRemoveConstraint}
+              onAddFilter={handleAddConstraint}
+            />
+          ) : undefined
         }
         detailPanel={
           selectedEntity ? (
@@ -233,55 +233,76 @@ function App() {
           ) : null
         }
       >
-        {/* Main Content Area - Proper Layout with Fixed Input */}
-        <div className="flex-1 flex flex-col h-full overflow-hidden">
-          {/* Scrollable content area */}
-          <div className="flex-1 overflow-y-auto">
-            {/* Conversation Thread */}
-            <div className="flex justify-center w-full">
-              <div className="w-full max-w-3xl px-4 pt-4">
-                <ConversationThread 
-                  messages={messages} 
-                  isLoading={isLoading}
-                  loadingSources={mockSourceSummaries}
-                  onExampleClick={handleExampleClick}
-                />
-              </div>
-            </div>
-            
-            {/* Results List - appears after query */}
-            {results.length > 0 && (
-              <div className="border-t border-zinc-700/50 mt-4">
-                <div className="max-w-4xl mx-auto">
-                  <ResultsList
-                    results={results}
-                    selectedId={selectedEntityId}
-                    onSelect={handleSelectEntity}
+        {/* Render view based on active navigation */}
+        {activeNavId === 'sources' ? (
+          <DataSourcesView
+            onConnect={(id) => console.log('Connect:', id)}
+            onDisconnect={(id) => console.log('Disconnect:', id)}
+            onSync={(id) => console.log('Sync:', id)}
+            onConfigure={(id) => console.log('Configure:', id)}
+            onAddSource={() => console.log('Add source')}
+          />
+        ) : activeNavId === 'history' ? (
+          <HistoryView
+            onSelect={(item) => console.log('Select:', item)}
+            onDelete={(id) => console.log('Delete:', id)}
+            onExport={() => console.log('Export')}
+          />
+        ) : activeNavId === 'settings' ? (
+          <SettingsView
+            onSave={() => console.log('Save settings')}
+          />
+        ) : (
+          /* Dashboard View - Main Content Area with Chat */
+          <div className="flex-1 flex flex-col h-full overflow-hidden">
+            {/* Scrollable content area */}
+            <div className="flex-1 overflow-y-auto">
+              {/* Conversation Thread */}
+              <div className="flex justify-center w-full">
+                <div className="w-full max-w-3xl px-4 pt-4">
+                  <ConversationThread 
+                    messages={messages} 
+                    isLoading={isLoading}
+                    loadingSources={mockSourceSummaries}
+                    onExampleClick={handleExampleClick}
                   />
                 </div>
               </div>
-            )}
+              
+              {/* Results List - appears after query */}
+              {results.length > 0 && (
+                <div className="border-t border-zinc-700/50 mt-4">
+                  <div className="max-w-4xl mx-auto">
+                    <ResultsList
+                      results={results}
+                      selectedId={selectedEntityId}
+                      onSelect={handleSelectEntity}
+                    />
+                  </div>
+                </div>
+              )}
+              
+              {/* Bottom spacer to prevent content from hiding behind input */}
+              <div className="h-28" />
+            </div>
             
-            {/* Bottom spacer to prevent content from hiding behind input */}
-            <div className="h-28" />
-          </div>
-          
-          {/* Query Input - Fixed at bottom */}
-          <div className="flex-shrink-0 pt-4 pb-4">
-            <div className="max-w-3xl mx-auto px-4">
-              <QueryInput
-                onSubmit={(query) => {
-                  handleSendMessage(query);
-                  setQueryInputValue('');
-                }}
-                isLoading={isLoading}
-                placeholder="Ask MERIDIAN to analyze and rank options..."
-                value={queryInputValue}
-                onChange={setQueryInputValue}
-              />
+            {/* Query Input - Fixed at bottom */}
+            <div className="flex-shrink-0 pt-4 pb-4">
+              <div className="max-w-3xl mx-auto px-4">
+                <QueryInput
+                  onSubmit={(query) => {
+                    handleSendMessage(query);
+                    setQueryInputValue('');
+                  }}
+                  isLoading={isLoading}
+                  placeholder="Ask MERIDIAN to analyze and rank options..."
+                  value={queryInputValue}
+                  onChange={setQueryInputValue}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </AppShell>
     </div>
   );

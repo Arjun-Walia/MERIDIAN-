@@ -75,7 +75,7 @@ export function AppShell({
           
           {/* Constraint Bar - responsive, compact on mobile */}
           {constraintBar && (
-            <div className="border-t border-border-default bg-surface flex-shrink-0">
+            <div className="border-t border-border-default bg-surface flex-shrink-0 overflow-visible">
               {constraintBar}
             </div>
           )}
